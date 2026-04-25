@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -93,9 +94,9 @@ export const VisionSection = () => {
   }, { scope: containerRef })
 
   return (
-    <section className="relative min-h-screen bg-platinum py-32 overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center mb-32">
+    <section className="relative min-h-screen bg-platinum py-16 sm:py-24 lg:py-32 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-16 sm:mb-24 lg:mb-32">
           <motion.h2 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -108,46 +109,53 @@ export const VisionSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-2xl text-slate-500 font-light leading-relaxed"
+            className="text-lg sm:text-xl lg:text-2xl text-slate-500 font-light leading-relaxed"
           >
             VC Lab Tech was founded to transcend traditional agency models. We provide a technical infrastructure capable of sustaining industrial-scale growth.
           </motion.p>
         </div>
 
         {/* Cinematic Asset Section */}
-        <div className="relative w-full aspect-[21/9] rounded-[3rem] overflow-hidden mb-32 group">
-          <motion.img
-            src="/assets/vision-main.png"
-            alt="VC Lab Tech Vision"
-            loading="lazy"
+        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[21/9] rounded-[1.5rem] sm:rounded-[2.2rem] lg:rounded-[3rem] overflow-hidden mb-16 sm:mb-24 lg:mb-32 group">
+          <motion.div
             initial={{ opacity: 0, scale: 1.14 }}
             whileInView={{ opacity: 1, scale: 1.1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 1.1, ease: [0.2, 1, 0.3, 1] }}
-            className="w-full h-full object-cover group-hover:scale-100 transition-transform duration-[2s] ease-out"
-          />
+            className="absolute inset-0 group-hover:scale-100 transition-transform duration-[2s] ease-out"
+          >
+            <Image
+              src="/assets/vision-main.png"
+              alt="VC Lab Tech Vision"
+              fill
+              loading="lazy"
+              decoding="async"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 92vw, 1200px"
+              className="object-cover"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
           
-          <div className="absolute inset-0 flex items-center justify-center p-12">
+          <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-8 lg:p-12">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5 }}
               className="text-center"
             >
-              <h3 className="text-4xl md:text-6xl font-display font-bold text-white tracking-tighter leading-none mb-8 max-w-4xl">
+              <h3 className="text-2xl sm:text-4xl md:text-6xl font-display font-bold text-white tracking-tighter leading-none mb-5 sm:mb-8 max-w-4xl">
                 UNIFYING INTELLIGENCE WITH <br /> OPERATIONAL POWER.
               </h3>
-              <div className="flex justify-center gap-4">
+              <div className="flex justify-center gap-3 sm:gap-4">
                 <div className="w-12 h-[1px] bg-cobalt mt-3" />
-                <span className="text-[10px] font-mono text-cobalt tracking-[0.4em] uppercase">Phase 02 // Genesis</span>
+                <span className="text-[9px] sm:text-[10px] font-mono text-cobalt tracking-[0.25em] sm:tracking-[0.4em] uppercase">Phase 02 // Genesis</span>
               </div>
             </motion.div>
           </div>
         </div>
 
         {/* Phase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-32 px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 lg:gap-24 px-0 sm:px-4 lg:px-12">
           {phases.slice(0, 2).map((phase, i) => (
             <motion.div 
               key={i}
@@ -156,8 +164,8 @@ export const VisionSection = () => {
               transition={{ duration: 1 }}
               className="space-y-8"
             >
-              <span className="text-[10px] font-mono text-cobalt tracking-[0.5em] uppercase">0{i + 1} - {phase.eyebrow}</span>
-              <h4 className="text-4xl font-display font-bold text-navy tracking-tighter">{phase.headline}</h4>
+              <span className="text-[9px] sm:text-[10px] font-mono text-cobalt tracking-[0.25em] sm:tracking-[0.5em] uppercase">0{i + 1} - {phase.eyebrow}</span>
+              <h4 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy tracking-tighter">{phase.headline}</h4>
               <p className="text-slate-500 leading-relaxed max-w-md">{phase.description}</p>
             </motion.div>
           ))}

@@ -27,9 +27,9 @@ const protocols = [
 
 export const PricingSection = () => {
   return (
-    <section className="relative w-full py-32 bg-platinum border-t border-navy/5">
-      <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto text-center mb-24">
+    <section className="relative w-full py-20 sm:py-24 lg:py-32 bg-platinum border-t border-navy/5">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto text-center mb-14 sm:mb-18 lg:mb-24">
           <motion.h2 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -41,7 +41,7 @@ export const PricingSection = () => {
           <p className="text-[10px] font-mono text-cobalt tracking-[0.5em] uppercase">Architecture Tiers</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
           {protocols.map((protocol, i) => (
             <motion.div
               key={i}
@@ -54,19 +54,19 @@ export const PricingSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="group p-12 rounded-[2.5rem] bg-white/20 backdrop-blur-[8px] border border-navy/10 hover:border-cobalt/30 transition-all duration-500 relative overflow-hidden foggy-element"
+              className="group p-6 sm:p-8 lg:p-12 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] bg-white/20 backdrop-blur-[8px] border border-navy/10 hover:border-cobalt/30 transition-all duration-500 relative overflow-hidden foggy-element"
             >
               {/* Subtle background glow */}
               <div className="absolute -top-24 -right-24 w-48 h-48 bg-cobalt/5 blur-[80px] group-hover:bg-cobalt/10 transition-all" />
               
               <div className="relative z-10">
-                <span className="text-[10px] font-mono text-cobalt tracking-[0.4em] uppercase mb-8 block opacity-60">0{i + 1} // Protocol</span>
-                <h3 className="text-3xl font-display font-bold text-navy tracking-tighter mb-4">{protocol.name}</h3>
-                <div className="text-5xl font-display font-bold text-navy mb-12 tracking-tighter italic">
+                <span className="text-[10px] font-mono text-cobalt tracking-[0.4em] uppercase mb-8 block opacity-60">{`0${i + 1} // Protocol`}</span>
+                <h3 className="text-2xl sm:text-3xl font-display font-bold text-navy tracking-tighter mb-4">{protocol.name}</h3>
+                <div className="text-4xl sm:text-5xl font-display font-bold text-navy mb-8 sm:mb-12 tracking-tighter italic">
                   ${protocol.price}<span className="text-sm font-sans font-normal text-slate-500"> /MO</span>
                 </div>
                 
-                <ul className="space-y-6 mb-16">
+                <ul className="space-y-4 sm:space-y-6 mb-10 sm:mb-16">
                   {protocol.features.map((feature, fi) => (
                     <li key={fi} className="flex items-center gap-4 text-slate-500 text-sm">
                       <div className="w-1.5 h-1.5 rounded-full bg-cobalt" />

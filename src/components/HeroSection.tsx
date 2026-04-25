@@ -28,7 +28,7 @@ export const HeroSection = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.76, 0, 0.24, 1] as any // Cast to satisfy strict easing types
+        ease: [0.76, 0, 0.24, 1] as [number, number, number, number]
       }
     }
   }
@@ -60,7 +60,7 @@ export const HeroSection = () => {
             animate={hasEngaged ? "visible" : "hidden"}
           >
             {words.map((word, i) => (
-              <span key={i} className="overflow-hidden inline-block mx-[0.05em] pb-8">
+              <span key={i} className="overflow-hidden inline-block mx-[0.05em] pb-3 sm:pb-6">
                 <motion.span 
                   variants={wordVariants}
                   className="inline-block"

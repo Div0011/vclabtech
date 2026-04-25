@@ -22,7 +22,7 @@ export const Navbar = () => {
   }, [])
 
   useEffect(() => {
-    const ids = ['home', 'stats', 'solutions', 'benefits', 'growth', 'vision', 'pricing', 'partners', 'contact']
+    const ids = ['home', 'stats', 'solutions', 'benefits', 'growth', 'vision', 'pricing', 'partners', 'lead']
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null)
@@ -51,7 +51,7 @@ export const Navbar = () => {
     { name: 'VISION', href: '#vision' },
     { name: 'PRICING', href: '#pricing' },
     { name: 'PARTNERS', href: '#partners' },
-    { name: 'CONTACT', href: '#contact' },
+    { name: 'CONTACT', href: '#lead' },
   ]
 
   const scrollToSection = (hash: string) => {
@@ -151,7 +151,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -100 }}
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-50 overflow-hidden bg-[#060a14]/95 backdrop-blur-3xl"
+            className="fixed inset-0 z-50 overflow-y-auto bg-[#060a14]/95 backdrop-blur-3xl"
             ref={menuContainerRef}
           >
             <div className="absolute top-0 w-full py-5 sm:py-8 px-4 sm:px-6 lg:px-12 flex justify-between items-center z-50">
@@ -178,7 +178,7 @@ export const Navbar = () => {
             <div className="absolute inset-0 opacity-[0.08] pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.22)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.2)_1px,transparent_1px)] bg-[size:52px_52px]" />
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.25),transparent_28%),radial-gradient(circle_at_80%_80%,rgba(29,78,216,0.2),transparent_35%)]" />
             
-            <div className="relative z-10 flex h-full w-full items-center justify-center px-4 sm:px-10 lg:px-12 pt-14 sm:pt-0">
+            <div className="relative z-10 flex min-h-full w-full items-center justify-center px-4 sm:px-10 lg:px-12 pt-24 pb-16 sm:pt-16">
               <nav className="w-full max-w-6xl">
                 <div className="mb-6 sm:mb-8 flex flex-wrap items-center justify-between gap-4">
                   <span className="text-[9px] sm:text-[10px] font-mono text-cobalt tracking-[0.25em] sm:tracking-[0.45em] uppercase opacity-80">
@@ -191,7 +191,7 @@ export const Navbar = () => {
                 </div>
 
                 <div className="border-y border-white/15 py-5 sm:py-8">
-                  <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
                     {navLinks.map((link) => (
                       <CyberNavLink 
                         key={link.name} 
@@ -208,7 +208,7 @@ export const Navbar = () => {
             <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 z-10 px-4 sm:px-10 lg:px-12">
               <div className="mx-auto flex w-full max-w-6xl items-center justify-between text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.14em] sm:tracking-[0.32em] text-white/55">
                 <span>VC LAB TECH // PIXELATED MENU</span>
-                <span className="hidden sm:inline-flex items-center gap-2">
+                <span className="hidden md:inline-flex items-center gap-2">
                   Focus brings clarity
                   <ArrowUpRight className="h-3.5 w-3.5" />
                 </span>

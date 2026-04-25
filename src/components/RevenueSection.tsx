@@ -64,7 +64,7 @@ export const RevenueSection = () => {
   })
 
   return (
-    <section ref={sectionRef} className="relative bg-platinum border-t border-navy/5 h-[260vh] sm:h-[300vh] lg:h-[320vh]">
+    <section ref={sectionRef} className="relative bg-platinum border-t border-navy/5 h-[240vh] sm:h-[300vh] lg:h-[320vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="absolute inset-0 bg-[#f2f6fc]" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/20 to-white/70 z-10 pointer-events-none" />
@@ -85,7 +85,8 @@ export const RevenueSection = () => {
                 fill
                 className="object-cover"
                 priority={activeStep === 0}
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, 100vw"
+                decoding="async"
               />
             </motion.div>
           </AnimatePresence>
@@ -110,7 +111,7 @@ export const RevenueSection = () => {
                   transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
-                  <div className="bg-white/74 backdrop-blur-xl border border-white/60 rounded-3xl px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12 text-center shadow-[0_25px_90px_rgba(15,23,42,0.14)]">
+                  <div className="bg-white/74 backdrop-blur-xl border border-white/60 rounded-2xl sm:rounded-3xl px-5 py-7 sm:px-8 sm:py-10 lg:px-12 lg:py-12 text-center shadow-[0_25px_90px_rgba(15,23,42,0.14)]">
                     <p className="text-[10px] sm:text-[11px] font-mono text-cobalt tracking-[0.3em] sm:tracking-[0.35em] uppercase mb-4 sm:mb-6">Phase {steps[activeStep].phase}</p>
                     <h3
                       className={`text-[clamp(1.5rem,8vw,3rem)] sm:text-[clamp(1.8rem,4vw,3rem)] tracking-tight mb-4 sm:mb-5 ${activeStep % 2 === 0 ? 'font-display font-bold' : 'font-sans font-extrabold uppercase'}`}

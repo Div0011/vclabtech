@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const partners = [
@@ -17,36 +17,43 @@ export const PartnerSection = () => {
   const doubledPartners = [...partners, ...partners]
 
   return (
-    <section className="py-48 bg-platinum border-t border-navy/5 relative z-10 overflow-hidden">
-      <div className="container mx-auto px-6 mb-24">
-        <h4 className="text-[11px] font-mono text-slate-500 tracking-[0.5em] uppercase">As featured in</h4>
+    <section className="py-20 sm:py-28 lg:py-40 bg-platinum border-t border-navy/5 relative z-10 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 mb-10 sm:mb-16 lg:mb-24">
+        <h4 className="text-[10px] sm:text-[11px] font-mono text-slate-500 tracking-[0.3em] sm:tracking-[0.5em] uppercase">As featured in</h4>
       </div>
       
       <div className="relative flex overflow-hidden">
         <motion.div 
           animate={{ x: ["-50%", "0%"] }}
           transition={{ 
-            duration: 40, 
+            duration: 34,
             repeat: Infinity, 
             ease: "linear" 
           }}
-          className="flex gap-32 items-center whitespace-nowrap px-12"
+          className="flex gap-12 sm:gap-20 lg:gap-32 items-center whitespace-nowrap px-6 sm:px-10 lg:px-12"
         >
           {doubledPartners.map((partner, index) => (
             <div
               key={index}
-              className="foggy-element flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 min-w-[300px]"
+              className="foggy-element flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 min-w-[180px] sm:min-w-[220px] lg:min-w-[300px]"
             >
-              <motion.img
-                src={partner.logo}
-                alt={partner.name}
-                loading="lazy"
+              <motion.div
                 initial={{ opacity: 0.35 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.9 }}
-                className="max-h-32 w-auto object-contain brightness-110 contrast-110"
-              />
+                className="relative h-16 sm:h-24 lg:h-32 w-[180px] sm:w-[220px] lg:w-[300px]"
+              >
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  fill
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 640px) 180px, (max-width: 1024px) 220px, 300px"
+                  className="object-contain brightness-110 contrast-110"
+                />
+              </motion.div>
             </div>
           ))}
         </motion.div>

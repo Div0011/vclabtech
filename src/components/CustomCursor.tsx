@@ -113,21 +113,21 @@ export const CustomCursor = () => {
     <>
       <div 
         ref={cursorRef} 
-        className="fixed top-0 left-0 w-11 h-11 pointer-events-none z-[100] flex items-center justify-center -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="fixed top-0 left-0 w-11 h-11 pointer-events-none z-[100] flex items-center justify-center -translate-x-1/2 -translate-y-1/2"
       >
         {/* Main ring */}
         <div 
           style={{ filter: 'url(#pixelate)' }}
-          className="absolute inset-0 rounded-full border border-cobalt/40 bg-white/12 backdrop-blur-[3px] shadow-[0_0_22px_rgba(37,99,235,0.25)] animate-[spin_8s_linear_infinite]"
+          className="absolute inset-0 rounded-full border border-navy/40 bg-navy/5 backdrop-blur-[2px] shadow-[0_0_20px_rgba(15,23,42,0.1)] animate-[spin_10s_linear_infinite]"
         >
-          <div className="absolute inset-2 rounded-full border border-cobalt/20" />
-          <div className="absolute inset-[0.2rem] rounded-full border border-white/20 opacity-70" />
+          <div className="absolute inset-2 rounded-full border border-navy/15" />
+          <div className="absolute inset-[0.2rem] rounded-full border border-navy/10 opacity-50" />
         </div>
       </div>
       
       <div 
         ref={cursorDotRef} 
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white pointer-events-none z-[101] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_14px_rgba(255,255,255,0.7)]"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-navy pointer-events-none z-[101] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_10px_rgba(15,23,42,0.3)]"
       />
 
       <div
