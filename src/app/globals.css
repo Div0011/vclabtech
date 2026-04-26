@@ -48,6 +48,14 @@
     }
   }
 
+  /* Pixel cursor canvas */
+  canvas.pixel-cursor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -79,10 +87,72 @@
     @apply -rotate-90;
   }
 
-  /* Font Reveal Logic */
+  /* Cursor Reveal Effect - Text color inversion that follows cursor */
+  .cursor-reveal {
+    display: inline-block;
+    --cursor-x: -999px;
+    --cursor-y: -999px;
+    --reveal-size: 0px;
+    transition: background-image 0.15s ease;
+  }
+
+  /* Black text -> Blue */
+  .cursor-reveal-black {
+    color: #0F172A;
+  }
+
+  /* Blue text -> Black */
+  .cursor-reveal-blue {
+    color: #2563EB;
+  }
+
+  /* White text -> Gradient */
+  .cursor-reveal-white {
+    color: #ffffff;
+  }
+
+  @media (pointer: fine) {
+    body:hover .cursor-reveal {
+      --reveal-size: 72px;
+    }
+
+    .cursor-reveal-black {
+      background-image:
+        radial-gradient(circle var(--reveal-size) at var(--cursor-x) var(--cursor-y), #3B82F6 0%, #60A5FA 45%, #93C5FD 70%, transparent 74%),
+        linear-gradient(#0F172A, #0F172A);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .cursor-reveal-blue {
+      background-image:
+        radial-gradient(circle var(--reveal-size) at var(--cursor-x) var(--cursor-y), #0F172A 0%, #1E293B 70%, transparent 74%),
+        linear-gradient(#2563EB, #2563EB);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .cursor-reveal-white {
+      background-image:
+        radial-gradient(circle var(--reveal-size) at var(--cursor-x) var(--cursor-y), #3B82F6 0%, #60A5FA 40%, #93C5FD 70%, transparent 74%),
+        linear-gradient(#ffffff, #ffffff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+  }
+
+  /* Legacy reveal styles (keep for compatibility) */
   .reveal-wrapper {
     position: relative;
     display: inline-block;
+    --cursor-x: -999px;
+    --cursor-y: -999px;
   }
 
   .reveal-base {
@@ -95,8 +165,8 @@
     font-family: var(--font-manrope);
     color: var(--color-cobalt);
     pointer-events: none;
-    clip-path: circle(80px at var(--mouse-x) var(--mouse-y));
-    -webkit-clip-path: circle(80px at var(--mouse-x) var(--mouse-y));
+    clip-path: circle(80px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
+    -webkit-clip-path: circle(80px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
   }
 
   .reveal-on-scroll {
@@ -129,6 +199,8 @@
 
   .menu-link-pixel {
     color: rgba(226, 232, 240, 0.42);
+    --cursor-x: -999px;
+    --cursor-y: -999px;
   }
 
   .menu-pixel-text {
@@ -152,15 +224,15 @@
 
   .menu-pixel-reveal {
     color: #60a5fa;
-    clip-path: circle(0px at var(--mouse-x) var(--mouse-y));
-    -webkit-clip-path: circle(0px at var(--mouse-x) var(--mouse-y));
+    clip-path: circle(0px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
+    -webkit-clip-path: circle(0px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
     transition: clip-path 320ms ease, -webkit-clip-path 320ms ease;
     text-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
   }
 
   .menu-link-pixel:hover .menu-pixel-reveal {
-    clip-path: circle(120px at var(--mouse-x) var(--mouse-y));
-    -webkit-clip-path: circle(120px at var(--mouse-x) var(--mouse-y));
+    clip-path: circle(120px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
+    -webkit-clip-path: circle(120px at var(--cursor-x, var(--mouse-x)) var(--cursor-y, var(--mouse-y)));
   }
 }
 

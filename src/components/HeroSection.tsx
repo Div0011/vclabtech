@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { useAudioStore } from '@/context/AudioContext'
-import { RevealText, SectionTilt } from './InteractiveWrappers'
-import { VantaBackground } from './VantaBackground'
+import { SectionTilt } from './InteractiveWrappers'
+import { GlassDropBackground } from './GlassDropBackground'
+import { CursorReveal } from './CursorReveal'
 
 export const HeroSection = () => {
   const { hasEngaged } = useAudioStore()
@@ -17,7 +18,7 @@ export const HeroSection = () => {
     visible: {
       transition: {
         staggerChildren: 0.05,
-        delayChildren: 0.2 // Small delay after engagement
+        delayChildren: 0.2
       }
     }
   }
@@ -35,7 +36,7 @@ export const HeroSection = () => {
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center pt-24 sm:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-12 overflow-hidden">
-      <VantaBackground />
+      <GlassDropBackground />
       <motion.div 
         initial={{ opacity: 0 }}
         animate={hasEngaged ? { opacity: 1 } : { opacity: 0 }}
@@ -54,7 +55,7 @@ export const HeroSection = () => {
         
         <SectionTilt direction="right">
           <motion.h1 
-            className="relative text-[clamp(2.4rem,12vw,6rem)] sm:text-[clamp(2.5rem,8vw,6rem)] font-display font-bold bg-gradient-to-br from-[#3B82F6] via-[#60A5FA] to-[#93C5FD] bg-clip-text text-transparent tracking-tighter leading-[0.88] sm:leading-[0.85] mb-8 sm:mb-12 max-w-4xl mx-auto flex flex-wrap justify-center overflow-hidden"
+            className="relative text-[clamp(2.4rem,12vw,6rem)] sm:text-[clamp(2.5rem,8vw,6rem)] font-display font-bold tracking-tighter leading-[0.88] sm:leading-[0.85] mb-8 sm:mb-12 max-w-4xl mx-auto flex flex-wrap justify-center overflow-hidden"
             variants={containerVariants}
             initial="hidden"
             animate={hasEngaged ? "visible" : "hidden"}
@@ -65,7 +66,9 @@ export const HeroSection = () => {
                   variants={wordVariants}
                   className="inline-block"
                 >
-                  {word}
+                  <CursorReveal variant="blue" as="span">
+                    {word}
+                  </CursorReveal>
                 </motion.span>
               </span>
             ))}
@@ -79,10 +82,9 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.8, ease: 'easeOut' }}
             className="max-w-3xl px-2 sm:px-0"
           >
-            <RevealText 
-              text="We architect high-performance web experiences that convert attention into authority."
-              className="text-xl sm:text-2xl lg:text-3xl text-navy/60 font-medium"
-            />
+            <CursorReveal variant="black" as="span" className="text-xl sm:text-2xl lg:text-3xl text-navy/60 font-medium">
+              We architect high-performance web experiences that convert attention into authority.
+            </CursorReveal>
           </motion.div>
           
           <motion.div

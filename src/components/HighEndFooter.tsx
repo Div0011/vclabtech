@@ -1,6 +1,8 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import { ArrowUpRight, GitBranch, Globe, Mail, Sparkles } from 'lucide-react'
+import gsap from 'gsap'
 
 const footerLinks = [
   { name: 'Home', href: '#home' },
@@ -26,71 +28,132 @@ const serviceLinks = [
 ]
 
 export const HighEndFooter = () => {
-  return (
-    <footer id="contact" className="relative z-10 overflow-hidden border-t border-navy/10 bg-[#f7f8fc]">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_0%_0%,rgba(37,99,235,0.09),transparent_30%),radial-gradient(circle_at_100%_100%,rgba(15,23,42,0.08),transparent_28%)]" />
-      <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[linear-gradient(to_right,rgba(15,23,42,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.12)_1px,transparent_1px)] bg-[size:72px_72px]" />
+  const footerRef = useRef<HTMLElement>(null)
+  const lineRefs = useRef<(HTMLDivElement | null)[]>([])
 
-      <div className="container relative mx-auto px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
-        <div className="mb-8 flex flex-wrap items-center gap-3 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.35em] text-cobalt/85">
-          <span className="rounded-full border border-cobalt/20 bg-white/70 px-4 py-2">Grid Footer Mode</span>
-          <span className="h-px w-20 bg-gradient-to-r from-cobalt/60 to-transparent" />
-          <span className="rounded-full border border-navy/10 bg-white/70 px-4 py-2 text-navy/70">Structured Information Architecture</span>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      lineRefs.current.forEach((line, i) => {
+        if (line) {
+          gsap.fromTo(
+            line,
+            { scaleX: 0, transformOrigin: 'left center' },
+            {
+              scaleX: 1,
+              duration: 1.2,
+              delay: i * 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: line,
+                start: 'top 90%',
+              },
+            }
+          )
+        }
+      })
+    }, footerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <footer
+      ref={footerRef}
+      id="contact"
+      className="relative z-10 overflow-hidden bg-gradient-to-b from-[#0F172A] via-[#1E3A5F] to-[#F8FAFC]"
+    >
+      {/* Subtle grid texture */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04] bg-[linear-gradient(to_right,rgba(15,23,42,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.2)_1px,transparent_1px)] bg-[size:80px_80px]" />
+      
+      {/* Soft radial glow accents */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] pointer-events-none bg-[radial-gradient(circle,rgba(59,130,246,0.12),transparent_70%)]" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] pointer-events-none bg-[radial-gradient(circle,rgba(147,197,253,0.15),transparent_70%)]" />
+
+      <div className="container relative mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Top section - Large brand statement */}
+        <div className="pt-20 sm:pt-28 lg:pt-36 pb-12 sm:pb-16">
+          <div className="max-w-5xl">
+            <p className="mb-4 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.5em] text-[#3B82F6]/70">
+              Engineering digital dominance
+            </p>
+            <h2 className="text-[clamp(3rem,10vw,7rem)] font-display font-bold tracking-tighter leading-[0.95]">
+              <span className="bg-gradient-to-r from-[#3B82F6] via-[#60A5FA] to-[#93C5FD] bg-clip-text text-transparent">
+                V C LAB TECH
+              </span>
+            </h2>
+            <p className="mt-6 text-base sm:text-lg text-white/40 max-w-xl leading-relaxed">
+              Premium interfaces, cinematic motion systems, and speed-first architecture for brands that demand standout presence.
+            </p>
+          </div>
         </div>
 
-        <div className="overflow-hidden rounded-[2rem] border border-navy/10 bg-white/75 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-            <div className="border-b border-navy/10 p-6 sm:p-8 md:border-r xl:border-b-0">
-              <p className="mb-4 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.22em] sm:tracking-[0.45em] text-cobalt">VC LAB TECH</p>
-              <h3 className="text-2xl font-display font-bold tracking-tight text-navy sm:text-3xl">
-                High-end digital experiences engineered for performance.
-              </h3>
-              <p className="mt-4 text-sm leading-relaxed text-slate-500">
-                Premium interfaces, cinematic motion systems, and speed-first architecture for brands that want standout presence.
-              </p>
-            </div>
+        {/* Divider */}
+        <div
+          ref={(el) => { lineRefs.current[0] = el }}
+          className="h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent"
+        />
 
-            <div className="border-b border-navy/10 p-6 sm:p-8 xl:border-b-0 xl:border-r">
-              <p className="mb-4 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.22em] sm:tracking-[0.45em] text-cobalt">Navigation</p>
-              <div className="space-y-2">
+        {/* Middle section - Links grid */}
+        <div className="py-12 sm:py-16 lg:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Navigation */}
+            <div>
+              <p className="mb-6 text-[10px] font-mono uppercase tracking-[0.35em] text-white/30">
+                Navigation
+              </p>
+              <div className="space-y-3">
                 {footerLinks.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
-                    className="group flex items-center justify-between rounded-xl border border-transparent px-3 py-2 text-sm font-semibold text-navy transition-all duration-300 hover:border-cobalt/20 hover:bg-cobalt/5 hover:text-cobalt"
+                    className="group flex items-center gap-2 text-sm text-white/50 transition-colors duration-300 hover:text-[#60A5FA]"
                   >
-                    <span>{link.name}</span>
-                    <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <span className="relative">
+                      {link.name}
+                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#60A5FA] transition-all duration-300 group-hover:w-full" />
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
 
-            <div className="border-b border-navy/10 p-6 sm:p-8 md:border-r xl:border-b-0">
-              <p className="mb-4 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.22em] sm:tracking-[0.45em] text-cobalt">Capabilities</p>
-              <div className="space-y-2">
+            {/* Capabilities */}
+            <div>
+              <p className="mb-6 text-[10px] font-mono uppercase tracking-[0.35em] text-white/30">
+                Capabilities
+              </p>
+              <div className="space-y-3">
                 {serviceLinks.map((service) => (
                   <a
                     key={service.name}
                     href={service.href}
-                    className="group flex items-center justify-between rounded-xl border border-transparent px-3 py-2 text-sm font-semibold text-navy transition-all duration-300 hover:border-cobalt/20 hover:bg-cobalt/5 hover:text-cobalt"
+                    className="group flex items-center gap-2 text-sm text-white/50 transition-colors duration-300 hover:text-[#60A5FA]"
                   >
-                    <span>{service.name}</span>
-                    <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <span className="relative">
+                      {service.name}
+                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#60A5FA] transition-all duration-300 group-hover:w-full" />
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-cobalt/10 via-white/90 to-white p-6 sm:p-8">
-              <p className="mb-4 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.22em] sm:tracking-[0.45em] text-cobalt">Contact + Social</p>
+            {/* Contact */}
+            <div>
+              <p className="mb-6 text-[10px] font-mono uppercase tracking-[0.35em] text-white/30">
+                Contact
+              </p>
               <a
                 href="mailto:info@vclabtech.com"
-                className="block text-xl font-display font-bold tracking-tight text-navy transition-colors duration-300 hover:text-cobalt sm:text-2xl"
+                className="block text-lg sm:text-xl font-display font-semibold text-white/80 transition-colors duration-300 hover:text-[#60A5FA] mb-8"
               >
                 info@vclabtech.com
               </a>
-              <div className="mt-5 grid grid-cols-1 gap-2">
+
+              <p className="mb-4 text-[10px] font-mono uppercase tracking-[0.35em] text-white/30">
+                Social
+              </p>
+              <div className="flex flex-wrap gap-3">
                 {socialLinks.map((social) => {
                   const Icon = social.icon
                   return (
@@ -99,34 +162,48 @@ export const HighEndFooter = () => {
                       href={social.href}
                       target="_blank"
                       rel="noreferrer"
-                    className="group inline-flex items-center justify-between rounded-xl border border-navy/15 bg-white/80 px-3 py-2 text-[11px] sm:text-xs font-mono uppercase tracking-[0.12em] sm:tracking-[0.22em] text-navy transition-all duration-300 hover:border-cobalt/40 hover:text-cobalt"
+                      className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[11px] font-mono uppercase tracking-[0.15em] text-white/50 transition-all duration-300 hover:border-[#3B82F6]/40 hover:bg-[#3B82F6]/10 hover:text-[#60A5FA]"
                     >
-                      <span className="inline-flex items-center gap-2">
-                        <Icon className="h-3.5 w-3.5" />
-                        {social.name}
-                      </span>
-                      <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <Icon className="h-3.5 w-3.5" />
+                      {social.name}
                     </a>
                   )
                 })}
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="relative border-t border-navy/10 bg-gradient-to-r from-navy via-[#11213f] to-cobalt px-6 py-5 sm:px-8">
-            <div className="absolute inset-0 pointer-events-none opacity-[0.16] bg-[linear-gradient(to_right,rgba(255,255,255,0.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.35)_1px,transparent_1px)] bg-[size:42px_42px]" />
-            <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3 text-white/80">
-                <Sparkles className="h-4 w-4" />
-                <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.35em]">Grid System Active</span>
-              </div>
-              <p className="text-sm text-white/70">
-                &copy; {new Date().getFullYear()} Virtual Connect Lab Tech. Crafted for a unique high-end web experience.
-              </p>
-            </div>
+        {/* Divider */}
+        <div
+          ref={(el) => { lineRefs.current[1] = el }}
+          className="h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent"
+        />
+
+        {/* Bottom bar */}
+        <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-4 w-4 text-[#3B82F6]/60" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/30">
+              VC LAB TECH
+            </span>
+          </div>
+          
+          <p className="text-xs text-white/25">
+            &copy; {new Date().getFullYear()} Virtual Connect Lab Tech. All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-6">
+            <a href="#" className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/25 transition-colors hover:text-white/50">
+              Privacy
+            </a>
+            <a href="#" className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/25 transition-colors hover:text-white/50">
+              Terms
+            </a>
           </div>
         </div>
       </div>
     </footer>
   )
 }
+

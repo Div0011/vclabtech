@@ -17,7 +17,7 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
   const [enableLenis, setEnableLenis] = useState(false)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)')
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: no-preference)')
     const updateMode = () => setEnableLenis(mediaQuery.matches)
 
     updateMode()
@@ -31,9 +31,21 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <ReactLenis root options={{ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) }}>
+    <ReactLenis 
+      root 
+      options={{ 
+        duration: 1.4, 
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 0.8,
+        touchMultiplier: 1.5,
+      }}
+    >
       <LenisVelocityTracker onVelocity={setVelocity} />
       {children}
     </ReactLenis>
   )
 }
+
