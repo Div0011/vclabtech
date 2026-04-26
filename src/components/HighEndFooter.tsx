@@ -60,6 +60,7 @@ export const HighEndFooter = () => {
     <footer
       ref={footerRef}
       id="contact"
+      data-no-cursor-reveal
       className="relative z-10 overflow-hidden bg-gradient-to-b from-[#0F172A] via-[#1E3A5F] to-[#F8FAFC]"
     >
       {/* Subtle grid texture */}
@@ -106,11 +107,11 @@ export const HighEndFooter = () => {
                   <a
                     key={link.name}
                     href={link.href}
-                    className="group flex items-center gap-2 text-sm text-white/50 transition-colors duration-300 hover:text-[#60A5FA]"
+                    className="group flex items-center gap-2 text-sm text-white/70 transition-all duration-300 hover:text-[#93C5FD] hover:drop-shadow-[0_0_10px_rgba(147,197,253,0.55)]"
                   >
                     <span className="relative">
                       {link.name}
-                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#60A5FA] transition-all duration-300 group-hover:w-full" />
+                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#93C5FD] shadow-[0_0_8px_rgba(147,197,253,0.7)] transition-all duration-300 group-hover:w-full" />
                     </span>
                   </a>
                 ))}
@@ -127,11 +128,11 @@ export const HighEndFooter = () => {
                   <a
                     key={service.name}
                     href={service.href}
-                    className="group flex items-center gap-2 text-sm text-white/50 transition-colors duration-300 hover:text-[#60A5FA]"
+                    className="group flex items-center gap-2 text-sm text-white/70 transition-all duration-300 hover:text-[#93C5FD] hover:drop-shadow-[0_0_10px_rgba(147,197,253,0.55)]"
                   >
                     <span className="relative">
                       {service.name}
-                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#60A5FA] transition-all duration-300 group-hover:w-full" />
+                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[#93C5FD] shadow-[0_0_8px_rgba(147,197,253,0.7)] transition-all duration-300 group-hover:w-full" />
                     </span>
                   </a>
                 ))}
@@ -145,7 +146,7 @@ export const HighEndFooter = () => {
               </p>
               <a
                 href="mailto:info@vclabtech.com"
-                className="block text-lg sm:text-xl font-display font-semibold text-white/80 transition-colors duration-300 hover:text-[#60A5FA] mb-8"
+                className="block text-lg sm:text-xl font-display font-semibold text-white/90 transition-all duration-300 hover:text-[#93C5FD] hover:drop-shadow-[0_0_14px_rgba(147,197,253,0.6)] mb-8"
               >
                 info@vclabtech.com
               </a>
@@ -162,7 +163,7 @@ export const HighEndFooter = () => {
                       href={social.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[11px] font-mono uppercase tracking-[0.15em] text-white/50 transition-all duration-300 hover:border-[#3B82F6]/40 hover:bg-[#3B82F6]/10 hover:text-[#60A5FA]"
+                      className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-[11px] font-mono uppercase tracking-[0.15em] text-white/70 transition-all duration-300 hover:border-[#93C5FD]/60 hover:bg-[#60A5FA]/10 hover:text-[#93C5FD] hover:shadow-[0_0_16px_rgba(96,165,250,0.35)]"
                     >
                       <Icon className="h-3.5 w-3.5" />
                       {social.name}

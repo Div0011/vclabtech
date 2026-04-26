@@ -46,9 +46,6 @@ const AUTO_REVEAL_SELECTOR = [
   'main small',
   'header a',
   'nav a',
-  'footer a',
-  'footer p',
-  'footer li',
 ].join(', ')
 
 function detectRevealVariant(element: HTMLElement): typeof REVEAL_VARIANTS[number] {
