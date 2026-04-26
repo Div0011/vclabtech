@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { GlobalProviders } from "@/components/GlobalProviders";
-import { CinematicPreloaderOverlay } from "@/components/CinematicPreloaderOverlay";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -51,7 +50,6 @@ export default function RootLayout({
           </filter>
         </svg>
         <GlobalProviders>
-          <CinematicPreloaderOverlay />
           {children}
         </GlobalProviders>
       </body>

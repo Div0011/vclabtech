@@ -40,11 +40,20 @@
       radial-gradient(900px 400px at -10% 100%, rgba(37, 99, 235, 0.06), transparent 60%),
       linear-gradient(180deg, #f7f7f5 0%, #f8fafc 40%, #f7f7f5 100%);
     @apply antialiased selection:bg-cobalt selection:text-white;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
   @media (pointer: fine) {
     body {
       cursor: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (pointer: coarse) {
+    body {
+      cursor: auto;
     }
   }
 
@@ -58,6 +67,7 @@
 
   html {
     scroll-behavior: auto;
+    overflow-x: hidden;
   }
 
   a,
@@ -65,6 +75,18 @@
   input,
   textarea {
     transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Improve touch targets on mobile */
+  button, a {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+  }
+
+  /* Prevent text selection on interactive elements */
+  button, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .foggy-element {

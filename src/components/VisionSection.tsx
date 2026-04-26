@@ -37,6 +37,9 @@ export const VisionSection = () => {
   const setVisionMode = useGlobalStore((state) => state.setVisionMode)
 
   useGSAP(() => {
+    // Skip horizontal scroll on mobile — use vertical layout instead
+    if (window.innerWidth < 768) return
+
     const totalWidth = horizontalRef.current?.scrollWidth || 0
     const windowWidth = window.innerWidth
 

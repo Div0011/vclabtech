@@ -51,7 +51,8 @@ const steps = [
   }
 ]
 
-export const RevenueSection = () => {
+/* ─── Desktop: sticky scroll-driven ─── */
+const DesktopRevenue = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeStep, setActiveStep] = useState(0)
   const { scrollYProgress } = useScroll({
@@ -65,7 +66,7 @@ export const RevenueSection = () => {
   })
 
   return (
-    <section ref={sectionRef} className="relative bg-platinum border-t border-navy/5 h-[240vh] sm:h-[300vh] lg:h-[320vh]">
+    <section ref={sectionRef} className="relative bg-platinum border-t border-navy/5 h-[240vh] sm:h-[300vh] lg:h-[320vh] hidden md:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="absolute inset-0 bg-[#f2f6fc]" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/20 to-white/70 z-10 pointer-events-none" />
@@ -86,7 +87,7 @@ export const RevenueSection = () => {
                 fill
                 className="object-cover"
                 priority={activeStep === 0}
-                sizes="(max-width: 768px) 100vw, 100vw"
+                sizes="100vw"
                 decoding="async"
               />
             </motion.div>
@@ -130,3 +131,63 @@ export const RevenueSection = () => {
     </section>
   )
 }
+
+/* ─── Mobile: simple stacked cards ─── */
+const MobileRevenue = () => {
+  return (
+    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-16 sm:py-20">
+      <div className="absolute inset-0 bg-[#f2f6fc]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/20 to-white/70 pointer-events-none" />
+
+      <div className="relative container mx-auto px-4 sm:px-6 z-10">
+        <div className="mb-10 sm:mb-14">
+          <h4 className="text-[9px] sm:text-[10px] font-mono text-cobalt tracking-[0.4em] uppercase mb-4">Frameworks & Insights</h4>
+          <h2 className="text-[clamp(1.8rem,8vw,3rem)] font-display font-bold text-navy tracking-tighter leading-[0.94] max-w-4xl">
+            ENGINEERING REVENUE <span className="text-cobalt italic">GROWTH</span>
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          {steps.map((step, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4">
+                <Image
+                  src={step.image}
+                  alt={step.title}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <div className="bg-white/74 backdrop-blur-xl border border-white/60 rounded-2xl px-5 py-6 shadow-[0_15px_50px_rgba(15,23,42,0.1)]">
+                <p className="text-[10px] font-mono text-cobalt tracking-[0.3em] uppercase mb-3">Phase {step.phase}</p>
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-navy tracking-tight mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-navy/75 leading-relaxed">{step.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export const RevenueSection = () => {
+  return (
+    <>
+      <DesktopRevenue />
+      <MobileRevenue />
+    </>
+  )
+}
+

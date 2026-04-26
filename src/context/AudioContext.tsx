@@ -16,7 +16,7 @@ export const useAudioStore = create<AudioState>()(
   persist(
     (set) => ({
       isMuted: false,
-      hasEngaged: false,
+      hasEngaged: true,
       toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
       engage: () => set({ hasEngaged: true }),
     }),

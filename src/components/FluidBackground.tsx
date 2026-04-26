@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { MeshDistortMaterial, Sphere, Float } from '@react-three/drei'
 import * as THREE from 'three'
@@ -8,7 +8,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 
 const Blob = () => {
   const mesh = useRef<THREE.Mesh>(null!)
-  
+
   useFrame((state) => {
     const { clock } = state
     mesh.current.rotation.x = clock.getElapsedTime() * 0.2
@@ -36,12 +36,24 @@ const Blob = () => {
 const BackgroundScene = () => {
   const shouldReduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
-  
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile for performance
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   // Transform scroll progress into flowing gradient positions
   const yPos = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 0.6, 0.3])
 
-  if (shouldReduceMotion) {
+  // Mobile / reduced-motion fallback: static CSS gradient only
+  if (shouldReduceMotion || isMobile) {
     return (
       <div className="fixed inset-0 z-[-1] overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(37,99,235,0.10),transparent_40%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_100%)]" />
     )
@@ -50,8 +62,8 @@ const BackgroundScene = () => {
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden bg-[#EBF4FF]">
       {/* Scroll-Reactive Flowing Gradient */}
-      <motion.div 
-        style={{ 
+      <motion.div
+        style={{
           top: yPos,
           opacity: opacity,
           backgroundImage: 'radial-gradient(circle at 50% 50%, #2563EB 0%, transparent 70%)'
@@ -61,7 +73,7 @@ const BackgroundScene = () => {
 
       {/* Static Fluid Gradient Overlay */}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_50%,#2563EB_0%,transparent_70%)]" />
-      
+
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
@@ -84,3 +96,4 @@ const BackgroundScene = () => {
 }
 
 export default BackgroundScene
+

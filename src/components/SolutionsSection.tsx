@@ -2,9 +2,12 @@
 
 import { useRef, useState } from 'react'
 import { ServiceCard } from './ServiceCard'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { SectionTilt } from './InteractiveWrappers'
 import { useGlobalStore } from '@/store/useGlobalStore'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 
 const services = [
   {
@@ -81,41 +84,56 @@ const services = [
   }
 ]
 
-export const SolutionsSection = () => {
+/* ─── Desktop: GSAP ScrollTrigger synced with Lenis ─── */
+const DesktopSolutions = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeServiceIndex, setActiveServiceIndex] = useState(0)
   const setGlobalActiveIndex = useGlobalStore((state) => state.setActiveServiceIndex)
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
+  useGSAP(() => {
+    if (!sectionRef.current) return
+    if (window.innerWidth < 768) return
 
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    const nextIndex = Math.min(
-      services.length - 1,
-      Math.max(0, Math.floor(latest * services.length))
-    )
-    setActiveServiceIndex((prev) => {
-      if (prev !== nextIndex) {
-        setGlobalActiveIndex(nextIndex)
-        return nextIndex
-      }
-      return prev
+    const st = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: 'top top',
+      end: `+=${services.length * 100}vh`,
+      scrub: 0.5,
+      pin: true,
+      onUpdate: (self) => {
+        const nextIndex = Math.min(
+          services.length - 1,
+          Math.max(0, Math.floor(self.progress * services.length))
+        )
+        setActiveServiceIndex((prev) => {
+          if (prev !== nextIndex) {
+            setGlobalActiveIndex(nextIndex)
+            return nextIndex
+          }
+          return prev
+        })
+      },
     })
-  })
+
+    return () => {
+      st.kill()
+    }
+  }, { scope: sectionRef })
 
   return (
     <section
       ref={sectionRef}
-      className="relative bg-platinum border-t border-navy/5"
+      className="relative bg-platinum border-t border-navy/5 hidden md:block"
       style={{ height: `${services.length * 100}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
+        {/* Background layers */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.04),transparent_36%),linear-gradient(180deg,#fbfbfa_0%,#f8fafc_55%,#f7f7f5_100%)]" />
         <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[linear-gradient(to_right,rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:84px_84px]" />
 
+        {/* Content */}
         <div className="relative container mx-auto h-full flex flex-col z-10">
+          {/* Header */}
           <div className="pt-12 sm:pt-16 lg:pt-20">
             <span className="text-cobalt font-mono text-[9px] sm:text-xs mb-3 sm:mb-4 block tracking-[0.35em] sm:tracking-[0.4em] uppercase opacity-80">
               OUR PROTOCOLS
@@ -127,7 +145,9 @@ export const SolutionsSection = () => {
             </SectionTilt>
           </div>
 
+          {/* Card + Icon Grid */}
           <div className="flex-1 grid grid-cols-1 lg:grid-cols-[42%_58%] items-center gap-8 lg:gap-16 py-4 sm:py-8">
+            {/* Icon */}
             <div className="flex items-center justify-center order-2 lg:order-1 min-h-[210px]">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -148,6 +168,7 @@ export const SolutionsSection = () => {
               </AnimatePresence>
             </div>
 
+            {/* Card */}
             <div className="flex items-center justify-center order-1 lg:order-2 min-h-[210px]">
               <div className="w-full max-w-xl">
                 <AnimatePresence mode="wait" initial={false}>
@@ -170,6 +191,7 @@ export const SolutionsSection = () => {
             </div>
           </div>
 
+          {/* Dots */}
           <div className="mt-auto pb-6 sm:pb-10 flex justify-center">
             <div className="flex items-center gap-2">
               {services.map((_, idx) => (
@@ -192,3 +214,57 @@ export const SolutionsSection = () => {
   )
 }
 
+/* ─── Mobile: simple stacked cards ─── */
+const MobileSolutions = () => {
+  return (
+    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-16 sm:py-20">
+      {/* Background layers */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.04),transparent_36%),linear-gradient(180deg,#fbfbfa_0%,#f8fafc_55%,#f7f7f5_100%)]" />
+      <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[linear-gradient(to_right,rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:84px_84px]" />
+
+      {/* Content */}
+      <div className="relative container mx-auto px-4 sm:px-6 z-10">
+        {/* Header */}
+        <div className="mb-10 sm:mb-14">
+          <span className="text-cobalt font-mono text-[9px] sm:text-xs mb-3 sm:mb-4 block tracking-[0.35em] uppercase opacity-80">
+            OUR PROTOCOLS
+          </span>
+          <SectionTilt direction="right">
+            <h2 className="text-[clamp(2rem,8vw,3.5rem)] font-display font-bold text-navy tracking-tighter leading-[0.95]">
+              CORE <span className="text-cobalt">SOLUTIONS</span>
+            </h2>
+          </SectionTilt>
+        </div>
+
+        {/* Cards */}
+        <div className="flex flex-col gap-6">
+          {services.map((service, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ServiceCard
+                index={idx}
+                title={service.title}
+                description={service.description}
+                isActive
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export const SolutionsSection = () => {
+  return (
+    <>
+      <DesktopSolutions />
+      <MobileSolutions />
+    </>
+  )
+}
