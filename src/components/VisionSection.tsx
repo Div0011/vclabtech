@@ -8,6 +8,7 @@ import { useGSAP } from '@gsap/react'
 import { useGlobalStore } from '@/store/useGlobalStore'
 import { useAudio } from '@/context/AudioContext'
 import { motion } from 'framer-motion'
+import { withBasePath } from '@/lib/assetPath'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -125,7 +126,7 @@ export const VisionSection = () => {
             className="absolute inset-0 group-hover:scale-100 transition-transform duration-[2s] ease-out"
           >
             <Image
-              src="/assets/vision-main.png"
+              src={withBasePath('/assets/vision-main.png')}
               alt="VC Lab Tech Vision"
               fill
               loading="lazy"

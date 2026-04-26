@@ -2,14 +2,15 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { withBasePath } from '@/lib/assetPath'
 
 const partners = [
-  { name: "Partner 1", logo: "/partners/11062b_1db239e728f641c3a3be5b7ca708f239~mv2.png" },
-  { name: "Partner 2", logo: "/partners/11062b_9e78da3320da497ab23ce28d738d388a~mv2.png" },
-  { name: "Gemini AI", logo: "/partners/Gemini_Generated_Image_8xmp7c8xmp7c8xmp-removebg-preview.png" },
-  { name: "Partner 4", logo: "/partners/images__1_-removebg-preview.png" },
-  { name: "KC Overseas", logo: "/partners/kc-overseas-education-laxmipuram-guntur-overseas-education-consultants-for-australia-5xos4.png" },
-  { name: "OpenTrain AI", logo: "/partners/opentrainai_logo-removebg-preview_edited.png" }
+  { name: "Partner 1", logo: withBasePath('/partners/11062b_1db239e728f641c3a3be5b7ca708f239~mv2.png') },
+  { name: "Partner 2", logo: withBasePath('/partners/11062b_9e78da3320da497ab23ce28d738d388a~mv2.png') },
+  { name: "Gemini AI", logo: withBasePath('/partners/Gemini_Generated_Image_8xmp7c8xmp7c8xmp-removebg-preview.png') },
+  { name: "Partner 4", logo: withBasePath('/partners/images__1_-removebg-preview.png') },
+  { name: "KC Overseas", logo: withBasePath('/partners/kc-overseas-education-laxmipuram-guntur-overseas-education-consultants-for-australia-5xos4.png') },
+  { name: "OpenTrain AI", logo: withBasePath('/partners/opentrainai_logo-removebg-preview_edited.png') }
 ]
 
 export const PartnerSection = () => {

@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { withBasePath } from '@/lib/assetPath'
 
 const CinematicTitle = ({ text, step }: { text: string; step: number }) => {
   const chars = text.split('')
@@ -34,19 +35,19 @@ const steps = [
     phase: "01",
     title: "STRENGTHEN FOUNDATION",
     description: "We begin by optimizing your website infrastructure for speed, user experience, and conversion performance.",
-    image: "/assets/revenue-1.png"
+    image: withBasePath('/assets/revenue-1.png')
   },
   {
     phase: "02",
     title: "DEPLOY ADVANCED SEO",
     description: "Advanced SEO frameworks position your brand in front of customers actively searching for your solutions.",
-    image: "/assets/revenue-2.png"
+    image: withBasePath('/assets/revenue-2.png')
   },
   {
     phase: "03",
     title: "ACCELERATE RESULTS",
     description: "Precision-targeted campaigns across Google and social platforms generate immediate visibility and scalable revenue growth.",
-    image: "/assets/revenue-3.png"
+    image: withBasePath('/assets/revenue-3.png')
   }
 ]
 

@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { withBasePath } from '@/lib/assetPath'
 
 export const BenefitSection = () => {
   return (
@@ -22,9 +23,9 @@ export const BenefitSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10 lg:gap-12">
           {[
-            { img: "/assets/benefit-1.png", text: "PRECISION" },
-            { img: "/assets/benefit-2.png", text: "THROUGH" },
-            { img: "/assets/benefit-3.png", text: "ARCHITECTURE" }
+            { img: withBasePath('/assets/benefit-1.png'), text: "PRECISION" },
+            { img: withBasePath('/assets/benefit-2.png'), text: "THROUGH" },
+            { img: withBasePath('/assets/benefit-3.png'), text: "ARCHITECTURE" }
           ].map((item, i) => (
             <motion.div 
               key={i}
