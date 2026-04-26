@@ -1,51 +1,40 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useAudio } from '@/context/AudioContext'
-import { useGlobalStore } from '@/store/useGlobalStore'
-
-type Step = 'objective' | 'parameters' | 'uplink' | 'success'
+import { motion } from 'framer-motion'
 
 export const LeadCapture = () => {
-  const [step, setStep] = useState<Step>('objective')
-  const [formData, setFormData] = useState({
-    objective: '',
-    budget: 5000,
-    timeline: 3,
-    name: '',
-    email: ''
-  })
-  const { playClick, playSuccess } = useAudio()
-  const setWarpMode = useGlobalStore((state) => state.setWarpMode)
-
-  const handleNext = (nextStep: Step) => {
-    playClick()
-    setStep(nextStep)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    playSuccess()
-    setWarpMode(true)
-    setStep('success')
-    
-    // Reset warp after 2 seconds
-    setTimeout(() => {
-      setWarpMode(false)
-    }, 2000)
-  }
-
-  const stepVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
-  }
-
   return (
     <section className="relative py-24 sm:py-32 lg:py-64 overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cobalt via-cobalt/90 to-silver opacity-90" />
+
+      {/* Join Bubble Layer */}
+      <div className="pointer-events-none absolute inset-0">
+        <motion.div
+          aria-hidden="true"
+          className="absolute -left-20 top-12 h-52 w-52 rounded-full border border-white/20 bg-white/12"
+          animate={{ y: [-10, 12, -10], x: [0, 8, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          aria-hidden="true"
+          className="absolute right-8 top-20 h-40 w-40 rounded-full border border-white/20 bg-white/10"
+          animate={{ y: [12, -8, 12], x: [0, -10, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          aria-hidden="true"
+          className="absolute bottom-10 left-1/4 h-32 w-32 rounded-full border border-white/20 bg-white/10"
+          animate={{ y: [8, -12, 8] }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          aria-hidden="true"
+          className="absolute -bottom-14 right-1/3 h-60 w-60 rounded-full border border-white/20 bg-white/8"
+          animate={{ y: [-6, 10, -6], x: [0, 6, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
       
       {/* Subtle Texture Overlay */}
       <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -80,10 +69,6 @@ export const LeadCapture = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* Decorative Blur Orbs */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/20 blur-[150px] rounded-full animate-pulse" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-white/10 blur-[150px] rounded-full animate-pulse" />
     </section>
   )
 }

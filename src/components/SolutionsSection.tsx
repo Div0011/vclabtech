@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { ServiceCard } from './ServiceCard'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { SectionTilt } from './InteractiveWrappers'
+import { useGlobalStore } from '@/store/useGlobalStore'
 
 const services = [
   {
@@ -83,57 +84,31 @@ const services = [
 export const SolutionsSection = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeServiceIndex, setActiveServiceIndex] = useState(0)
+  const setGlobalActiveIndex = useGlobalStore((state) => state.setActiveServiceIndex)
 
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  })
 
-    let rafId: number | null = null
-
-    const updateByScrollPosition = () => {
-      const sectionRect = section.getBoundingClientRect()
-      const scrollableDistance = sectionRect.height - window.innerHeight
-
-      if (scrollableDistance <= 0) {
-        setActiveServiceIndex(0)
-        return
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const nextIndex = Math.min(
+      services.length - 1,
+      Math.max(0, Math.floor(latest * services.length))
+    )
+    setActiveServiceIndex((prev) => {
+      if (prev !== nextIndex) {
+        setGlobalActiveIndex(nextIndex)
+        return nextIndex
       }
-
-      const rawProgress = -sectionRect.top / scrollableDistance
-      const progress = Math.min(1, Math.max(0, rawProgress))
-      const nextIndex = Math.min(
-        services.length - 1,
-        Math.max(0, Math.floor(progress * services.length))
-      )
-
-      setActiveServiceIndex((prev) => (prev === nextIndex ? prev : nextIndex))
-    }
-
-    const handleScroll = () => {
-      if (rafId !== null) return
-      rafId = window.requestAnimationFrame(() => {
-        updateByScrollPosition()
-        rafId = null
-      })
-    }
-
-    updateByScrollPosition()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-      if (rafId !== null) {
-        window.cancelAnimationFrame(rafId)
-      }
-    }
-  }, [])
+      return prev
+    })
+  })
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-platinum px-4 sm:px-6 lg:px-12"
+      className="relative bg-platinum border-t border-navy/5"
       style={{ height: `${services.length * 100}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
@@ -160,7 +135,7 @@ export const SolutionsSection = () => {
                   initial={{ opacity: 0, y: 28, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.992 }}
-                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                   className="relative w-40 h-40 sm:w-52 sm:h-52 flex items-center justify-center border border-navy/10 rounded-[2rem] bg-white/75 backdrop-blur-xl shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
                   aria-live="polite"
                   aria-label={`${services[activeServiceIndex].title} icon`}
@@ -181,7 +156,7 @@ export const SolutionsSection = () => {
                     initial={{ opacity: 0, y: 26, scale: 0.99 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.992 }}
-                    transition={{ duration: 0.92, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <ServiceCard
                       index={activeServiceIndex}
@@ -216,3 +191,4 @@ export const SolutionsSection = () => {
     </section>
   )
 }
+

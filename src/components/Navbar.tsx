@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { MagneticButton } from './MagneticButton'
 import { Logo } from './Logo'
+import { useSmoothScroll } from './SmoothScroll'
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -12,6 +13,7 @@ export const Navbar = () => {
   const [activeSection, setActiveSection] = useState('home')
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const { scrollTo } = useSmoothScroll()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,12 +54,8 @@ export const Navbar = () => {
   const ctaLink = { name: 'Get Started', href: '#lead', number: '05' }
 
   const scrollToSection = (hash: string) => {
-    const sectionId = hash.replace('#', '')
-    const target = document.getElementById(sectionId)
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setActiveSection(sectionId)
-    }
+    scrollTo(hash, { duration: 1.2, offset: -80 })
+    setActiveSection(hash.replace('#', ''))
   }
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -176,3 +174,4 @@ export const Navbar = () => {
     </>
   )
 }
+

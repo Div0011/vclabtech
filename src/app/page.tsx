@@ -26,8 +26,11 @@ export default function Home() {
       <section id="home">
         <HeroSection />
       </section>
+
       <section id="stats">
-        <StatsSection />
+        <LazyRevealSection delay={0.1}>
+          <StatsSection />
+        </LazyRevealSection>
       </section>
 
       <section id="solutions">
@@ -35,37 +38,37 @@ export default function Home() {
       </section>
 
       <section id="benefits">
-        <LazyRevealSection>
+        <LazyRevealSection delay={0.15}>
           <BenefitSection />
         </LazyRevealSection>
       </section>
 
       <section id="growth">
-        <LazyRevealSection>
+        <LazyRevealSection delay={0.15}>
           <RevenueSection />
         </LazyRevealSection>
       </section>
 
       <section id="vision">
-        <LazyRevealSection>
+        <LazyRevealSection delay={0.15}>
           <VisionSection />
         </LazyRevealSection>
       </section>
 
       <section id="pricing">
-        <LazyRevealSection>
+        <LazyRevealSection delay={0.1}>
           <PricingSection />
         </LazyRevealSection>
       </section>
 
       <section id="partners">
-        <LazyRevealSection>
+        <LazyRevealSection delay={0.1}>
           <PartnerSection />
         </LazyRevealSection>
       </section>
 
       <section id="lead">
-        <LazyRevealSection minHeightClassName="min-h-[25vh]">
+        <LazyRevealSection minHeightClassName="min-h-[25vh]" delay={0.1}>
           <LeadCapture />
         </LazyRevealSection>
       </section>
@@ -74,3 +77,4 @@ export default function Home() {
     </>
   )
 }
+

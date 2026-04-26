@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { useAudioStore } from '@/context/AudioContext'
 import { SectionTilt } from './InteractiveWrappers'
-import { GlassDropBackground } from './GlassDropBackground'
 import { CursorReveal } from './CursorReveal'
 
 export const HeroSection = () => {
@@ -36,7 +35,7 @@ export const HeroSection = () => {
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center pt-24 sm:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-12 overflow-hidden">
-      <GlassDropBackground />
+      <div className="absolute inset-0 z-0 bg-platinum" />
       <motion.div 
         initial={{ opacity: 0 }}
         animate={hasEngaged ? { opacity: 1 } : { opacity: 0 }}
