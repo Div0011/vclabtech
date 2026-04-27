@@ -45,10 +45,12 @@ export const VisionSection = () => {
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: `+=${totalWidth - windowWidth}`,
+        end: `+=${(totalWidth - windowWidth) * 1.2}`,
         pin: true,
-        scrub: 1,
+        pinSpacing: true,
+        scrub: 1.2,
         invalidateOnRefresh: true,
+        anticipatePin: 1.2,
         onEnter: () => {
           setVisionMode(true)
         },
@@ -68,7 +70,7 @@ export const VisionSection = () => {
       x: -(totalWidth - windowWidth),
       ease: "none",
       autoRound: true
-    })
+    }, 0)
 
     // Cinematic reveals for each phase
     const phasesEl = gsap.utils.toArray('.vision-phase') as HTMLElement[]

@@ -6,7 +6,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { withBasePath } from '@/lib/assetPath'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin'
 import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const CinematicTitle = ({ text, step }: { text: string; step: number }) => {
   const chars = text.split('')
@@ -62,8 +65,10 @@ const DesktopRevenue = () => {
   const indexRef = useRef(0)
   const cooldownRef = useRef(false)
   const isActiveRef = useRef(false)
+  const stRef = useRef<any>(null)
 
-  const pinVh = steps.length * 100
+  // Pin with more generous spacing to ensure smooth transitions
+  const pinVh = (steps.length + 0.5) * 120
 
   useGSAP(() => {
     if (!sectionRef.current || window.innerWidth < 768) return
@@ -74,27 +79,31 @@ const DesktopRevenue = () => {
       start: 'top top',
       end: `+=${pinVh}vh`,
       pin: true,
-      anticipatePin: 1,
+      anticipatePin: 1.2,
       onEnter: () => { isActiveRef.current = true },
       onLeave: () => { isActiveRef.current = false },
       onEnterBack: () => { isActiveRef.current = true },
       onLeaveBack: () => { isActiveRef.current = false },
     })
 
+    stRef.current = st
     return () => { st.kill() }
   }, { scope: sectionRef })
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth < 768) return
-    const COOLDOWN = 700
+    const COOLDOWN = 650
 
     const handleWheel = (e: WheelEvent) => {
-      if (!isActiveRef.current) return
+      if (!isActiveRef.current || !stRef.current) return
 
       const dir = e.deltaY > 0 ? 1 : -1
       const next = indexRef.current + dir
 
-      if (next < 0 || next >= steps.length) return
+      // At boundaries — let natural scroll take over smoothly
+      if (next < 0 || next >= steps.length) {
+        return
+      }
 
       e.preventDefault()
       if (cooldownRef.current) return
@@ -103,10 +112,19 @@ const DesktopRevenue = () => {
       indexRef.current = next
       setActiveStep(next)
 
-      const st = ScrollTrigger.getById('revenue-pin')
+      // Smooth scroll position update
+      const st = stRef.current
       if (st) {
-        const stepPx = (st.end - st.start) / steps.length
-        window.scrollTo({ top: st.start + next * stepPx, behavior: 'instant' as ScrollBehavior })
+        const totalPinDistance = st.end - st.start
+        const stepPx = totalPinDistance / steps.length
+        const targetScroll = st.start + next * stepPx
+        
+        gsap.to(window, {
+          scrollTo: targetScroll,
+          duration: 0.4,
+          ease: 'power2.inOut',
+          overwrite: 'auto'
+        })
       }
 
       setTimeout(() => { cooldownRef.current = false }, COOLDOWN)

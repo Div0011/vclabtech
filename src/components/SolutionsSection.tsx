@@ -7,7 +7,10 @@ import { SectionTilt } from './InteractiveWrappers'
 import { useGlobalStore } from '@/store/useGlobalStore'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin'
 import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const services = [
   {
@@ -94,10 +97,11 @@ const DesktopSolutions = () => {
   const indexRef = useRef(0)
   const cooldownRef = useRef(false)
   const isActiveRef = useRef(false)
+  const stRef = useRef<any>(null)
 
-  // Pin the section — give it enough scroll distance to hold while user
-  // cycles through all 8 cards (100vh per card + 1 card buffer)
-  const pinVh = services.length * 100
+  // Pin the section with generous scroll distance for all cards + buffer
+  // Each card gets 150vh to ensure strong holding and smooth transitions
+  const pinVh = (services.length + 1) * 150
 
   useGSAP(() => {
     if (!sectionRef.current || window.innerWidth < 768) return
@@ -108,28 +112,32 @@ const DesktopSolutions = () => {
       start: 'top top',
       end: `+=${pinVh}vh`,
       pin: true,
-      anticipatePin: 1,
+      anticipatePin: 1.2,
       onEnter: () => { isActiveRef.current = true },
       onLeave: () => { isActiveRef.current = false },
       onEnterBack: () => { isActiveRef.current = true },
       onLeaveBack: () => { isActiveRef.current = false },
     })
 
+    stRef.current = st
     return () => { st.kill() }
   }, { scope: sectionRef })
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth < 768) return
-    const COOLDOWN = 700
+    const COOLDOWN = 650
 
     const handleWheel = (e: WheelEvent) => {
-      if (!isActiveRef.current) return
+      if (!isActiveRef.current || !stRef.current) return
 
       const dir = e.deltaY > 0 ? 1 : -1
       const next = indexRef.current + dir
 
-      // At boundaries — don't intercept; let scroll exit the section naturally
-      if (next < 0 || next >= services.length) return
+      // At boundaries — let natural scroll take over smoothly
+      if (next < 0 || next >= services.length) {
+        // Don't prevent default at boundaries — let page scroll naturally
+        return
+      }
 
       e.preventDefault()
       if (cooldownRef.current) return
@@ -139,11 +147,20 @@ const DesktopSolutions = () => {
       setActiveServiceIndex(next)
       setGlobalActiveIndex(next)
 
-      // Sync physical scroll so the pin releases at the right time
-      const st = ScrollTrigger.getById('solutions-pin')
+      // Smooth scroll position update to maintain section lock
+      const st = stRef.current
       if (st) {
-        const stepPx = (st.end - st.start) / services.length
-        window.scrollTo({ top: st.start + next * stepPx, behavior: 'instant' as ScrollBehavior })
+        const totalPinDistance = st.end - st.start
+        const stepPx = totalPinDistance / services.length
+        const targetScroll = st.start + next * stepPx
+        
+        // Use requestAnimationFrame to prevent layout thrashing
+        gsap.to(window, {
+          scrollTo: targetScroll,
+          duration: 0.4,
+          ease: 'power2.inOut',
+          overwrite: 'auto'
+        })
       }
 
       setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
