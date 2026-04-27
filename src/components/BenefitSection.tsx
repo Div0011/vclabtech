@@ -33,13 +33,15 @@ export const BenefitSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: i * 0.2 }}
               className="relative aspect-square rounded-full overflow-hidden group border border-navy/10"
+              style={{ contain: 'layout paint', willChange: 'transform' }}
             >
               <motion.div
                 initial={{ opacity: 0, scale: 1.08 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 1, ease: [0.2, 1, 0.3, 1] }}
-                className="absolute inset-0 transition-transform duration-[3s] group-hover:scale-125"
+                className="absolute inset-0 transition-transform duration-[1.2s] group-hover:scale-110"
+                style={{ willChange: 'transform' }}
               >
                 <Image
                   src={item.img}
@@ -52,7 +54,7 @@ export const BenefitSection = () => {
                 />
               </motion.div>
               <div className="absolute inset-0 bg-white/20 flex items-center justify-center">
-                <div className="w-[80%] h-[80%] border border-white/20 rounded-full flex items-center justify-center backdrop-blur-[2px]">
+                <div className="w-[80%] h-[80%] border border-white/20 rounded-full flex items-center justify-center backdrop-blur-[1px]">
                   <span className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-white tracking-tighter uppercase text-center">{item.text}</span>
                 </div>
               </div>

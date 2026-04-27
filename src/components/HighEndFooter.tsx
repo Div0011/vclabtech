@@ -62,6 +62,7 @@ export const HighEndFooter = () => {
       id="contact"
       data-no-cursor-reveal
       className="relative z-10 overflow-hidden bg-gradient-to-b from-[#0F172A] via-[#1E3A5F] to-[#F8FAFC]"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 900px' }}
     >
       {/* Subtle grid texture */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04] bg-[linear-gradient(to_right,rgba(15,23,42,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.2)_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -182,7 +183,7 @@ export const HighEndFooter = () => {
         />
 
         {/* Bottom bar */}
-        <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ contain: 'layout paint' }}>
           <div className="flex items-center gap-3">
             <Sparkles className="h-4 w-4 text-[#3B82F6]/60" />
             <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/30">
@@ -207,4 +208,3 @@ export const HighEndFooter = () => {
     </footer>
   )
 }
-

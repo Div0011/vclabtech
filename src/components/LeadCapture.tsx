@@ -4,7 +4,10 @@ import { motion } from 'framer-motion'
 
 export const LeadCapture = () => {
   return (
-    <section className="relative py-24 sm:py-32 lg:py-64 overflow-hidden">
+    <section
+      className="relative py-24 sm:py-32 lg:py-64 overflow-hidden"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
+    >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cobalt via-cobalt/90 to-silver opacity-90" />
 
@@ -12,25 +15,25 @@ export const LeadCapture = () => {
       <div className="pointer-events-none absolute inset-0">
         <motion.div
           aria-hidden="true"
-          className="absolute -left-20 top-12 h-52 w-52 rounded-full border border-white/20 bg-white/12"
+          className="absolute -left-20 top-12 h-52 w-52 rounded-full border border-white/20 bg-white/12 hidden md:block"
           animate={{ y: [-10, 12, -10], x: [0, 8, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           aria-hidden="true"
-          className="absolute right-8 top-20 h-40 w-40 rounded-full border border-white/20 bg-white/10"
+          className="absolute right-8 top-20 h-40 w-40 rounded-full border border-white/20 bg-white/10 hidden md:block"
           animate={{ y: [12, -8, 12], x: [0, -10, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           aria-hidden="true"
-          className="absolute bottom-10 left-1/4 h-32 w-32 rounded-full border border-white/20 bg-white/10"
+          className="absolute bottom-10 left-1/4 h-32 w-32 rounded-full border border-white/20 bg-white/10 hidden lg:block"
           animate={{ y: [8, -12, 8] }}
           transition={{ duration: 7.5, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           aria-hidden="true"
-          className="absolute -bottom-14 right-1/3 h-60 w-60 rounded-full border border-white/20 bg-white/8"
+          className="absolute -bottom-14 right-1/3 h-60 w-60 rounded-full border border-white/20 bg-white/8 hidden lg:block"
           animate={{ y: [-6, 10, -6], x: [0, 6, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -62,7 +65,7 @@ export const LeadCapture = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 sm:px-16 lg:px-20 py-5 sm:py-6 lg:py-8 rounded-full border border-white/40 bg-white/5 backdrop-blur-3xl text-white font-display font-bold text-base sm:text-xl tracking-tight hover:bg-white hover:text-navy transition-all duration-700 shadow-2xl"
+            className="px-10 sm:px-16 lg:px-20 py-5 sm:py-6 lg:py-8 rounded-full border border-white/40 bg-white/5 backdrop-blur-3xl text-white font-display font-bold text-base sm:text-xl tracking-tight hover:bg-white hover:text-navy transition-all duration-300 shadow-2xl will-change-transform"
             >
               INITIATE UPLINK
             </motion.button>
