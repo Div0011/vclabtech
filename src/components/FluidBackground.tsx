@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { MeshDistortMaterial, Sphere, Float } from '@react-three/drei'
+import { MeshDistortMaterial, Sphere } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 
@@ -11,49 +11,47 @@ const Blob = () => {
 
   useFrame((state) => {
     const { clock } = state
-    mesh.current.rotation.x = clock.getElapsedTime() * 0.2
-    mesh.current.rotation.y = clock.getElapsedTime() * 0.3
+    mesh.current.rotation.x = clock.getElapsedTime() * 0.12
+    mesh.current.rotation.y = clock.getElapsedTime() * 0.18
   })
 
   return (
-    <Float speed={1.6} rotationIntensity={0.35} floatIntensity={0.8}>
-      <Sphere ref={mesh} args={[1, 32, 32]} scale={1.85}>
-        <MeshDistortMaterial
-          color="#2563EB"
-          speed={1.25}
-          distort={0.18}
-          radius={1}
-          emissive="#2563EB"
-          emissiveIntensity={0.06}
-          roughness={0}
-          metalness={0.6}
-        />
-      </Sphere>
-    </Float>
+    <Sphere ref={mesh} args={[1, 16, 16]} scale={1.75}>
+      <MeshDistortMaterial
+        color="#2563EB"
+        speed={0.8}
+        distort={0.12}
+        radius={1}
+        emissive="#2563EB"
+        emissiveIntensity={0.05}
+        roughness={0}
+        metalness={0.45}
+      />
+    </Sphere>
   )
 }
 
 const BackgroundScene = () => {
   const shouldReduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
-  const [isMobile, setIsMobile] = useState(false)
+  const [shouldUseWebGL, setShouldUseWebGL] = useState(false)
 
-  // Detect mobile for performance
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    const mediaQuery = window.matchMedia('(min-width: 1280px) and (pointer: fine) and (prefers-reduced-motion: no-preference)')
+    const updateMode = () => setShouldUseWebGL(mediaQuery.matches)
+
+    updateMode()
+    mediaQuery.addEventListener('change', updateMode)
+
+    return () => mediaQuery.removeEventListener('change', updateMode)
   }, [])
 
   // Transform scroll progress into flowing gradient positions
   const yPos = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 0.6, 0.3])
 
-  // Mobile / reduced-motion fallback: static CSS gradient only
-  if (shouldReduceMotion || isMobile) {
+  // Use a static fallback unless the device can comfortably handle the scene.
+  if (shouldReduceMotion || !shouldUseWebGL) {
     return (
       <div className="fixed inset-0 z-[-1] overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(37,99,235,0.10),transparent_40%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_100%)]" />
     )
@@ -75,13 +73,12 @@ const BackgroundScene = () => {
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_50%,#2563EB_0%,transparent_70%)]" />
 
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
         camera={{ position: [0, 0, 5], fov: 75 }}
       >
         <ambientLight intensity={1.5} />
         <pointLight position={[10, 10, 10]} intensity={2} />
-        <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={2} />
         <Blob />
       </Canvas>
 
@@ -96,4 +93,3 @@ const BackgroundScene = () => {
 }
 
 export default BackgroundScene
-

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
@@ -40,10 +40,6 @@ const AUTO_REVEAL_SELECTOR = [
   'main p',
   'main a',
   'main li',
-  'main span',
-  'main strong',
-  'main em',
-  'main small',
   'header a',
   'nav a',
 ].join(', ')
@@ -79,12 +75,12 @@ export const CustomCursor = () => {
   const cursorLabelRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameRef = useRef<number | null>(null)
+  const isAnimatingRef = useRef(false)
   const revealElementsRef = useRef<HTMLElement[]>([])
   const observerRef = useRef<MutationObserver | null>(null)
-  const refreshTimerRef = useRef<number | null>(null)
   const particlesRef = useRef<PixelParticle[]>([])
   const mouseRef = useRef({ x: -100, y: -100, prevX: -100, prevY: -100 })
-  const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+  const [isEnabled, setIsEnabled] = useState(false)
 
   const xTo = useRef<gsap.QuickToFunc | null>(null)
   const yTo = useRef<gsap.QuickToFunc | null>(null)
@@ -102,6 +98,31 @@ export const CustomCursor = () => {
       xDotTo.current = gsap.quickTo(cursorDotRef.current, 'x', { duration: 0.08, ease: 'power2.out' })
       yDotTo.current = gsap.quickTo(cursorDotRef.current, 'y', { duration: 0.08, ease: 'power2.out' })
     }
+  }, [])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(pointer: fine) and (min-width: 1024px) and (prefers-reduced-motion: no-preference)')
+    const updateMode = () => setIsEnabled(mediaQuery.matches)
+
+    updateMode()
+    mediaQuery.addEventListener('change', updateMode)
+
+    return () => mediaQuery.removeEventListener('change', updateMode)
+  }, [])
+
+  const syncPointerState = useCallback(() => {
+    const mouse = mouseRef.current
+
+    document.documentElement.style.setProperty('--mouse-x', `${mouse.x}px`)
+    document.documentElement.style.setProperty('--mouse-y', `${mouse.y}px`)
+
+    revealElementsRef.current.forEach((el) => {
+      const rect = el.getBoundingClientRect()
+      const relX = mouse.x - rect.left
+      const relY = mouse.y - rect.top
+      el.style.setProperty('--cursor-x', `${relX}px`)
+      el.style.setProperty('--cursor-y', `${relY}px`)
+    })
   }, [])
 
   const animateCanvas = useCallback(() => {
@@ -168,12 +189,28 @@ export const CustomCursor = () => {
 
     mouse.prevX = mouse.x
     mouse.prevY = mouse.y
-
-    animationFrameRef.current = requestAnimationFrame(animateCanvas)
   }, [])
 
+  const tick = useCallback(function tickFrame() {
+    syncPointerState()
+    animateCanvas()
+
+    if (particlesRef.current.length > 0) {
+      animationFrameRef.current = requestAnimationFrame(tickFrame)
+    } else {
+      animationFrameRef.current = null
+      isAnimatingRef.current = false
+    }
+  }, [animateCanvas, syncPointerState])
+
+  const startAnimationLoop = useCallback(() => {
+    if (isAnimatingRef.current) return
+    isAnimatingRef.current = true
+    animationFrameRef.current = requestAnimationFrame(tick)
+  }, [tick])
+
   useEffect(() => {
-    if (isTouchDevice) return
+    if (!isEnabled) return
 
     const refreshRevealTargets = () => {
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(AUTO_REVEAL_SELECTOR))
@@ -203,9 +240,6 @@ export const CustomCursor = () => {
     })
     observerRef.current.observe(document.body, { childList: true, subtree: true })
     window.addEventListener('resize', refreshRevealTargets)
-    refreshTimerRef.current = window.setInterval(refreshRevealTargets, 2000)
-
-    animationFrameRef.current = requestAnimationFrame(animateCanvas)
 
     const handleMouseMove = (e: MouseEvent) => {
       // Move cursor elements
@@ -224,18 +258,7 @@ export const CustomCursor = () => {
         mouseRef.current.prevY = e.clientY
       }
 
-      // Update global mouse position for reveal effects
-      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`)
-      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`)
-
-      // Keep local clip-path effects aligned by writing per-element cursor coords.
-      revealElementsRef.current.forEach((el) => {
-        const rect = el.getBoundingClientRect()
-        const relX = e.clientX - rect.left
-        const relY = e.clientY - rect.top
-        el.style.setProperty('--cursor-x', `${relX}px`)
-        el.style.setProperty('--cursor-y', `${relY}px`)
-      })
+      startAnimationLoop()
     }
 
     const handleMouseEnter = () => {
@@ -297,9 +320,6 @@ export const CustomCursor = () => {
       if (observerRef.current) {
         observerRef.current.disconnect()
       }
-      if (refreshTimerRef.current !== null) {
-        window.clearInterval(refreshTimerRef.current)
-      }
       window.removeEventListener('resize', refreshRevealTargets)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mousedown', handlePointerDown)
@@ -310,9 +330,9 @@ export const CustomCursor = () => {
         el.removeEventListener('mouseleave', handleMouseLeave as EventListener)
       })
     }
-  }, [isTouchDevice, animateCanvas])
+  }, [isEnabled, animateCanvas, startAnimationLoop])
 
-  if (isTouchDevice) return null
+  if (!isEnabled) return null
 
   const pixels = []
   const center = Math.floor(GRID_SIZE / 2)
@@ -351,4 +371,3 @@ export const CustomCursor = () => {
     </>
   )
 }
-
