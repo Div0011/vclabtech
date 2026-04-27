@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { ServiceCard } from './ServiceCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SectionTilt } from './InteractiveWrappers'
@@ -15,7 +15,7 @@ const services = [
     description: "Data-driven analysis and optimization to improve user experience, speed, engagement, and conversion performance.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M3 3v18h18M7 16l3-4 4 4 4-8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 3v18h18M7 16l3-4 4 4 4-8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -24,7 +24,7 @@ const services = [
     description: "Conversion-focused, visually powerful, and scalable web experiences built to strengthen brand authority and drive growth.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -33,7 +33,7 @@ const services = [
     description: "Strategic search engine optimization frameworks that increase organic traffic, rankings, and long-term digital authority.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3M11 8v6M8 11h6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -42,7 +42,7 @@ const services = [
     description: "Precision-targeted ad campaigns designed to maximize ROI, reach high-intent audiences, and accelerate lead generation.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v4l3 3" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 8v4l3 3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -51,7 +51,7 @@ const services = [
     description: "Strategic content and campaign management to increase brand awareness, engagement, and community-driven growth.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -60,7 +60,7 @@ const services = [
     description: "High-impact content ecosystems — blogs, visuals, videos, and campaigns — engineered to attract, educate, and convert.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -69,7 +69,7 @@ const services = [
     description: "High-conversion video strategies including promotional content, explainers, testimonials, and social-first visuals.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="m22 8-6 4 6 4V8Z" /><rect x="2" y="6" width="14" height="12" rx="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
@@ -78,55 +78,87 @@ const services = [
     description: "A holistic approach combining SEO, automation, branding, and analytics to drive sustainable growth.",
     icon: (
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   }
 ]
 
-/* ─── Desktop: GSAP ScrollTrigger synced with Lenis ─── */
+/* ─── Desktop: wheel-intercept, one scroll = one card ─── */
 const DesktopSolutions = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeServiceIndex, setActiveServiceIndex] = useState(0)
   const setGlobalActiveIndex = useGlobalStore((state) => state.setActiveServiceIndex)
 
+  // Refs so wheel handler closes over stable values
+  const indexRef = useRef(0)
+  const cooldownRef = useRef(false)
+  const isActiveRef = useRef(false)
+
+  // Pin the section — give it enough scroll distance to hold while user
+  // cycles through all 8 cards (100vh per card + 1 card buffer)
+  const pinVh = services.length * 100
+
   useGSAP(() => {
-    if (!sectionRef.current) return
-    if (window.innerWidth < 768) return
+    if (!sectionRef.current || window.innerWidth < 768) return
 
     const st = ScrollTrigger.create({
+      id: 'solutions-pin',
       trigger: sectionRef.current,
       start: 'top top',
-      end: `+=${services.length * 100}vh`,
-      scrub: 0.5,
+      end: `+=${pinVh}vh`,
       pin: true,
-      onUpdate: (self) => {
-        const nextIndex = Math.min(
-          services.length - 1,
-          Math.max(0, Math.floor(self.progress * services.length))
-        )
-        setActiveServiceIndex((prev) => {
-          if (prev !== nextIndex) {
-            setGlobalActiveIndex(nextIndex)
-            return nextIndex
-          }
-          return prev
-        })
-      },
+      anticipatePin: 1,
+      onEnter: () => { isActiveRef.current = true },
+      onLeave: () => { isActiveRef.current = false },
+      onEnterBack: () => { isActiveRef.current = true },
+      onLeaveBack: () => { isActiveRef.current = false },
     })
 
-    return () => {
-      st.kill()
-    }
+    return () => { st.kill() }
   }, { scope: sectionRef })
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.innerWidth < 768) return
+    const COOLDOWN = 700
+
+    const handleWheel = (e: WheelEvent) => {
+      if (!isActiveRef.current) return
+
+      const dir = e.deltaY > 0 ? 1 : -1
+      const next = indexRef.current + dir
+
+      // At boundaries — don't intercept; let scroll exit the section naturally
+      if (next < 0 || next >= services.length) return
+
+      e.preventDefault()
+      if (cooldownRef.current) return
+      cooldownRef.current = true
+
+      indexRef.current = next
+      setActiveServiceIndex(next)
+      setGlobalActiveIndex(next)
+
+      // Sync physical scroll so the pin releases at the right time
+      const st = ScrollTrigger.getById('solutions-pin')
+      if (st) {
+        const stepPx = (st.end - st.start) / services.length
+        window.scrollTo({ top: st.start + next * stepPx, behavior: 'instant' as ScrollBehavior })
+      }
+
+      setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [setGlobalActiveIndex])
 
   return (
     <section
       ref={sectionRef}
       className="relative bg-platinum border-t border-navy/5 hidden md:block"
-      style={{ height: `${services.length * 100}vh` }}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="h-screen overflow-hidden">
         {/* Background layers */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.04),transparent_36%),linear-gradient(180deg,#fbfbfa_0%,#f8fafc_55%,#f7f7f5_100%)]" />
         <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[linear-gradient(to_right,rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:84px_84px]" />
@@ -217,7 +249,7 @@ const DesktopSolutions = () => {
 /* ─── Mobile: simple stacked cards ─── */
 const MobileSolutions = () => {
   return (
-    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-16 sm:py-20">
+    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-10 sm:py-14">
       {/* Background layers */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.04),transparent_36%),linear-gradient(180deg,#fbfbfa_0%,#f8fafc_55%,#f7f7f5_100%)]" />
       <div className="absolute inset-0 opacity-[0.035] pointer-events-none bg-[linear-gradient(to_right,rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:84px_84px]" />

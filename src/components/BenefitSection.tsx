@@ -7,7 +7,7 @@ import { withBasePath } from '@/lib/assetPath'
 
 export const BenefitSection = () => {
   return (
-    <section className="py-20 sm:py-28 lg:py-32 bg-platinum border-t border-navy/5 relative overflow-hidden">
+    <section className="pt-0 pb-20 sm:pb-28 lg:pb-32 bg-platinum relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center mb-14 sm:mb-20 lg:mb-32">
           <motion.h2 

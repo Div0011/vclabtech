@@ -1,16 +1,13 @@
 'use client'
 
 import { useGlobalStore } from '@/store/useGlobalStore'
-import { useAudioStore } from '@/context/AudioContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
 export const CinematicPreloaderOverlay = () => {
   const { assetsLoaded, loadProgress, setLoadProgress } = useGlobalStore()
-  const { hasEngaged, engage } = useAudioStore()
-  
-  // Simulated progress since we don't have all assets right now
-  // In a real scenario, this would be tied to R3F's useProgress
+  const [hasEngaged, setHasEngaged] = useState(false)
+
   useEffect(() => {
     if (!assetsLoaded) {
       const interval = setInterval(() => {
@@ -34,7 +31,7 @@ export const CinematicPreloaderOverlay = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              onClick={engage}
+              onClick={() => setHasEngaged(true)}
               className="group relative px-8 py-4 bg-transparent border border-white/20 text-white tracking-[0.2em] uppercase text-sm overflow-hidden"
             >
               <div className="absolute inset-0 bg-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-out" />

@@ -1,7 +1,6 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { AudioEngineProvider } from '@/context/AudioContext'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { ReactNode } from 'react'
 
@@ -17,11 +16,9 @@ const FluidBackground = dynamic(() => import('@/components/FluidBackground'), {
 
 export function GlobalProviders({ children }: { children: ReactNode }) {
   return (
-    <AudioEngineProvider>
-      <SmoothScroll>
-        <FluidBackground />
-        {children}
-      </SmoothScroll>
-    </AudioEngineProvider>
+    <SmoothScroll>
+      <FluidBackground />
+      {children}
+    </SmoothScroll>
   )
 }

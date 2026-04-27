@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useAudio } from '@/context/AudioContext'
 
 const protocols = [
   {

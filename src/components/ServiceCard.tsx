@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { useAudio } from '@/context/AudioContext'
 import { motion } from 'framer-motion'
 
 interface ServiceCardProps {
@@ -13,7 +12,6 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard = ({ title, description, index, icon, isActive }: ServiceCardProps) => {
-  const { playHover } = useAudio()
   const cardRef = useRef<HTMLDivElement>(null)
   const mousePos = useRef({ x: 0, y: 0 })
   const rafId = useRef<number | null>(null)
@@ -37,7 +35,6 @@ export const ServiceCard = ({ title, description, index, icon, isActive }: Servi
 
   return (
     <motion.div
-      onMouseEnter={() => playHover()}
       initial={isActive ? false : { opacity: 0, y: 50 }}
       whileInView={isActive ? undefined : { opacity: 1, y: 0 }}
       viewport={isActive ? undefined : { once: true }}

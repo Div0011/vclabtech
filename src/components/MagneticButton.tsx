@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, MouseEvent, ReactNode } from 'react'
-import { useAudio } from '@/context/AudioContext'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
@@ -12,7 +11,6 @@ interface MagneticButtonProps {
 }
 
 export const MagneticButton = ({ children, onClick, className = '' }: MagneticButtonProps) => {
-  const { playHover, playClick } = useAudio()
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const xTo = useRef<gsap.QuickToFunc | null>(null)
@@ -37,8 +35,8 @@ export const MagneticButton = ({ children, onClick, className = '' }: MagneticBu
     if (yTo.current) yTo.current(y * 0.2)
   }
 
-  const handleMouseEnter = (e: MouseEvent) => {
-    playHover(e.clientX, e.clientY)
+  const handleMouseEnter = (_e: MouseEvent) => {
+    // magnetic entrance — no audio
   }
 
   const handleMouseLeave = () => {
@@ -47,7 +45,6 @@ export const MagneticButton = ({ children, onClick, className = '' }: MagneticBu
   }
 
   const handleClick = () => {
-    playClick()
     if (onClick) onClick()
   }
 

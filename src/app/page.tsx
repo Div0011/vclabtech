@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { Navbar } from '@/components/Navbar'
 import { LazyRevealSection } from '@/components/LazyRevealSection'
 import { HighEndFooter } from '@/components/HighEndFooter'
+import { ScrollRestoration } from '@/components/ScrollRestoration'
 
 // Dynamic imports for components
 const CustomCursor = dynamic(() => import('@/components/CustomCursor').then(mod => mod.CustomCursor), { ssr: false, loading: () => null })
@@ -20,6 +21,7 @@ const LeadCapture = dynamic(() => import('@/components/LeadCapture').then(mod =>
 export default function Home() {
   return (
     <>
+      <ScrollRestoration />
       <CustomCursor />
       <Navbar />
 
@@ -44,15 +46,11 @@ export default function Home() {
       </section>
 
       <section id="growth">
-        <LazyRevealSection delay={0.15}>
-          <RevenueSection />
-        </LazyRevealSection>
+        <RevenueSection />
       </section>
 
       <section id="vision">
-        <LazyRevealSection delay={0.15}>
-          <VisionSection />
-        </LazyRevealSection>
+        <VisionSection />
       </section>
 
       <section id="pricing">

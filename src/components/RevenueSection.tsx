@@ -1,9 +1,12 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { withBasePath } from '@/lib/assetPath'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 
 const CinematicTitle = ({ text, step }: { text: string; step: number }) => {
   const chars = text.split('')
@@ -51,23 +54,74 @@ const steps = [
   }
 ]
 
-/* ─── Desktop: sticky scroll-driven ─── */
+/* ─── Desktop: wheel-intercept, one scroll = one step ─── */
 const DesktopRevenue = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeStep, setActiveStep] = useState(0)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
 
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    const step = Math.min(steps.length - 1, Math.floor(latest * steps.length))
-    setActiveStep((prev) => (prev === step ? prev : step))
-  })
+  const indexRef = useRef(0)
+  const cooldownRef = useRef(false)
+  const isActiveRef = useRef(false)
+
+  const pinVh = steps.length * 100
+
+  useGSAP(() => {
+    if (!sectionRef.current || window.innerWidth < 768) return
+
+    const st = ScrollTrigger.create({
+      id: 'revenue-pin',
+      trigger: sectionRef.current,
+      start: 'top top',
+      end: `+=${pinVh}vh`,
+      pin: true,
+      anticipatePin: 1,
+      onEnter: () => { isActiveRef.current = true },
+      onLeave: () => { isActiveRef.current = false },
+      onEnterBack: () => { isActiveRef.current = true },
+      onLeaveBack: () => { isActiveRef.current = false },
+    })
+
+    return () => { st.kill() }
+  }, { scope: sectionRef })
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.innerWidth < 768) return
+    const COOLDOWN = 700
+
+    const handleWheel = (e: WheelEvent) => {
+      if (!isActiveRef.current) return
+
+      const dir = e.deltaY > 0 ? 1 : -1
+      const next = indexRef.current + dir
+
+      if (next < 0 || next >= steps.length) return
+
+      e.preventDefault()
+      if (cooldownRef.current) return
+      cooldownRef.current = true
+
+      indexRef.current = next
+      setActiveStep(next)
+
+      const st = ScrollTrigger.getById('revenue-pin')
+      if (st) {
+        const stepPx = (st.end - st.start) / steps.length
+        window.scrollTo({ top: st.start + next * stepPx, behavior: 'instant' as ScrollBehavior })
+      }
+
+      setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-platinum border-t border-navy/5 h-[240vh] sm:h-[300vh] lg:h-[320vh] hidden md:block">
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative bg-platinum border-t border-navy/5 hidden md:block"
+    >
+      <div className="h-screen overflow-hidden">
         <div className="absolute inset-0 bg-[#f2f6fc]" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/20 to-white/70 z-10 pointer-events-none" />
 
@@ -135,7 +189,7 @@ const DesktopRevenue = () => {
 /* ─── Mobile: simple stacked cards ─── */
 const MobileRevenue = () => {
   return (
-    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-16 sm:py-20">
+    <section className="relative bg-platinum border-t border-navy/5 md:hidden py-10 sm:py-14">
       <div className="absolute inset-0 bg-[#f2f6fc]" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/20 to-white/70 pointer-events-none" />
 

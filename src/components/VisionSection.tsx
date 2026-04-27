@@ -6,7 +6,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { useGlobalStore } from '@/store/useGlobalStore'
-import { useAudio } from '@/context/AudioContext'
 import { motion } from 'framer-motion'
 import { withBasePath } from '@/lib/assetPath'
 
@@ -33,7 +32,6 @@ const phases = [
 export const VisionSection = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const horizontalRef = useRef<HTMLDivElement>(null)
-  const { playMilestone } = useAudio()
   const setVisionMode = useGlobalStore((state) => state.setVisionMode)
 
   useGSAP(() => {
@@ -52,7 +50,6 @@ export const VisionSection = () => {
         scrub: 1,
         invalidateOnRefresh: true,
         onEnter: () => {
-          playMilestone()
           setVisionMode(true)
         },
         onLeaveBack: () => {
@@ -92,13 +89,12 @@ export const VisionSection = () => {
       )
     })
 
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill())
-    }
+    // Return cleanup - useGSAP with scope handles cleanup automatically
+    // Do NOT call ScrollTrigger.getAll().kill() here as it nukes other sections' triggers
   }, { scope: containerRef })
 
   return (
-    <section className="relative min-h-screen bg-platinum py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <section className="relative min-h-screen bg-platinum pt-0 pb-16 sm:pb-24 lg:pb-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center mb-16 sm:mb-24 lg:mb-32">
           <motion.h2 
