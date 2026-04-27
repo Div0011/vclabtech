@@ -1,8 +1,10 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { ArrowUpRight, GitBranch, Globe, Mail, Sparkles } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowUpRight, GitBranch, Globe, Mail } from 'lucide-react'
 import gsap from 'gsap'
+import { withBasePath } from '@/lib/assetPath'
 
 const footerLinks = [
   { name: 'Home', href: '#home' },
@@ -185,14 +187,20 @@ export const HighEndFooter = () => {
         {/* Bottom bar */}
         <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ contain: 'layout paint' }}>
           <div className="flex items-center gap-3">
-            <Sparkles className="h-4 w-4 text-[#3B82F6]/60" />
+            <Image
+              src={withBasePath('/assets/logo.png')}
+              alt="VC Lab Tech Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
             <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/30">
               VC LAB TECH
             </span>
           </div>
           
-          <p className="text-xs text-white/25">
-            &copy; {new Date().getFullYear()} Virtual Connect Lab Tech. All rights reserved.
+          <p className="text-xs font-semibold text-[#3B82F6]">
+            VC LAB TECH &copy; 2026 Virtual Connect Lab Tech. All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">
